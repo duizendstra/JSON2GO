@@ -87,13 +87,14 @@ class JSON2Go:
             elif isinstance(value, list):
                 if value and isinstance(value[0], dict):
                     nested_struct_name = key.capitalize()
-                    field_type = f'[]{nested_struct_name}'
+                    field_type = f'[]*{nested_struct_name}'  # Change this line to use a slice of pointers to the nested struct
                     go_struct += self.generate_go_struct(nested_struct_name, value[0], indent_level + 1)
                 else:
                     field_type = '[]interface{}'
             elif isinstance(value, dict):
                 nested_struct_name = key.capitalize()
                 go_struct += self.generate_go_struct(nested_struct_name, value, indent_level + 1)
+                field_type = f'*{nested_struct_name}'  # Change this line to use a pointer to the nested struct
             else:
                 field_type = 'interface{}'
 
